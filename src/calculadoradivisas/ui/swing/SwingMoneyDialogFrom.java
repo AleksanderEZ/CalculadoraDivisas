@@ -1,13 +1,10 @@
 package calculadoradivisas.ui.swing;
 
-import calculadoradivisas.view.FileCurrencyLoader;
 import calculadoradivisas.model.Currency;
 import calculadoradivisas.model.Money;
-import calculadoradivisas.view.MoneyDialog;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.IOException;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -15,20 +12,36 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import calculadoradivisas.ui.MoneyDialogFrom;
 
-public class SwingMoneyDialog extends JPanel implements MoneyDialog{
-
+public class SwingMoneyDialogFrom extends JPanel implements MoneyDialogFrom {
+    
     private Currency currency;
+    private final Currency[] currencies;
     private String amount;
     
-    public SwingMoneyDialog() {
+    public SwingMoneyDialogFrom(Currency [] currencies){
+        this.currencies = currencies;
         this.add(amount());
         this.add(currency());
     }
     
     @Override
     public Money get() {
-        return new Money(Double.parseDouble(amount), currency);
+        double howMuch = 0;
+        try{
+            howMuch = Double.parseDouble(amount);
+        } catch (NumberFormatException e) {
+            /* Number not found */
+        }
+        return new Money(currency, howMuch);
+    }
+
+    private JComboBox currency() {
+        final JComboBox comboBox = new JComboBox(currencies);
+        comboBox.addItemListener(currencyChanged());
+        currency = (Currency) comboBox.getSelectedItem();
+        return comboBox;
     }
 
     private Component amount() {
@@ -38,29 +51,12 @@ public class SwingMoneyDialog extends JPanel implements MoneyDialog{
         amount = textField.getText();
         return textField;
     }
-    
-    private Component currency() {
-        final JComboBox combo = new JComboBox(currencies());
-        combo.addItemListener(currencyChanged());
-        currency = (Currency) combo.getSelectedItem();
-        return combo;
-    }
-
-    private Currency[] currencies() {
-       Currency [] currencies = null;
-        try {
-            currencies =  new FileCurrencyLoader().load();
-        } catch (IOException ex) {
-            System.out.println("Error en la obtencion de divisas.");
-        }
-       return currencies;
-    }
 
     private ItemListener currencyChanged() {
         return new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.DESELECTED) return;
+                if (e.getStateChange() == ItemEvent.DESELECTED) return;
                 currency = (Currency) e.getItem();
             }
         };
@@ -87,10 +83,9 @@ public class SwingMoneyDialog extends JPanel implements MoneyDialog{
                 try {
                     amount = document.getText(0, document.getLength());
                 } catch (BadLocationException ex) {
-                    System.out.println("Error en el cambio de cantidad.");
+                    System.out.println("Could not reach text field value.");
                 }
-            }            
+            }
         };
     }
-
 }

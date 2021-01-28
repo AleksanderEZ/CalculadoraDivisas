@@ -1,19 +1,19 @@
 package calculadoradivisas.model;
 
 public class Money {
-    private final double quantity;
     private final Currency currency;
+    private final double amount;
 
-    public Money(double quantity, Currency currency) {
-        this.quantity = quantity;
+    public Money(Currency currency, double amount) {
         this.currency = currency;
-    }
-
-    public double getQuantity() {
-        return quantity;
+        this.amount = amount;
     }
 
     public Currency getCurrency() {
         return currency;
     }
-}
+
+    public double getAmount() {
+        return amount;
+    }
+}    

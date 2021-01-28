@@ -1,14 +1,14 @@
 package calculadoradivisas.model;
 
-public class Exchange {
+public class ExchangeRate {
     private final Currency from;
     private final Currency to;
-    private final double amount;
+    private final double rate;
 
-    public Exchange(Currency from, Currency to, double amount) {
+    public ExchangeRate(Currency from, Currency to, double rate) {
         this.from = from;
         this.to = to;
-        this.amount = amount;
+        this.rate = rate;
     }
 
     public Currency getFrom() {
@@ -19,8 +19,7 @@ public class Exchange {
         return to;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getRate() {
+        return rate;
     }
-    
 }

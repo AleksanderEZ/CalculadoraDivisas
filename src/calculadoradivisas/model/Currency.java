@@ -1,33 +1,32 @@
 package calculadoradivisas.model;
 
 public class Currency {
-    private final String id;
+    private final String code;
     private final String name;
-    private final String icon;
+    private final String sign;
 
-    public Currency(String id, String name, String icon) {
-        this.id = id;
+    public Currency(String code, String name, String sign) {
+        this.code = code;
         this.name = name;
-        this.icon = icon;
+        this.sign = sign;
     }
 
-    public String getId() {
-        return id;
+    public String getCode() {
+        return code;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getSign() {
+        return sign;
     }
 
     @Override
     public String toString() {
-        return id;
+        return code;
     }
-    
     
     
 }

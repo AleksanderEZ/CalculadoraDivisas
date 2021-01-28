@@ -11,33 +11,36 @@ import java.util.Set;
 public class FileCurrencyLoader implements CurrencyLoader{
 
     @Override
-    public Currency[] load() throws IOException {
-        Set<Currency> currency = new HashSet<>();
-        File file = new File("file.txt");
+    public Currency[] load(String path) {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(file));
+            reader = new BufferedReader(new FileReader(new File(path)));
         } catch (Exception ex) {
-            System.out.println("Error en la lectura del fichero");
+            System.out.println("Error opening file.");
         }
+        
+        Set<Currency> currencies = new HashSet<>();
         
         while(true){
-            String line;
-            line = reader.readLine();
+            String line = null;
+            try {
+                line = reader.readLine();
+            } catch (IOException ex) {
+                System.out.println("Error reading file");
+            }
             if(line == null) break;
-            
-            String [] partio = line.split(";");
-            
-            currency.add(new Currency(partio[0], partio[1], partio[2]));
+            String [] lineAux = line.split(";");
+            currencies.add(new Currency(lineAux[0], lineAux[1], lineAux[2]));
         }
         
-        Currency [] currencies = new Currency[currency.size()];
+        Currency [] result = new Currency[currencies.size()];
+        
         int i = 0;
-        for(Currency divisa: currency){
-            currencies[i] = divisa;
+        for(Currency badge: currencies){
+            result[i] = badge;
             i++;
         }
-        return currencies;
+        
+        return result;
     }
-
 }
