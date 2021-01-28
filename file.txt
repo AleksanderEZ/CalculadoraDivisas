@@ -1,0 +1,4 @@
+USD;Dólar estadounidense;$
+CAD;Dólar canadiense;$
+GBP;Libra esterlina;$
+EUR;Euro;€
